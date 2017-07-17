@@ -3,40 +3,63 @@ package model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 
 /**
- * The persistent class for the BHUSER database table.
+ * The persistent class for the bhuser database table.
  * 
  */
 @Entity
+@Table(name="bhuser")
 @NamedQuery(name="Bhuser.findAll", query="SELECT b FROM Bhuser b")
 public class Bhuser implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private long bhuserid;
+	@Column(name="BHUSERID")
+	private int bhuserid;
+
+	@Column(name="GRAVATARURL")
+	private String gravatarurl;
 
 	@Temporal(TemporalType.DATE)
+	@Column(name="JOINDATE")
 	private Date joindate;
 
+	@Column(name="MOTTO")
 	private String motto;
 
+	@Column(name="USEREMAIL")
 	private String useremail;
 
+	@Column(name="USERNAME")
 	private String username;
 
+	@Column(name="USERPASSWORD")
 	private String userpassword;
+
+	//bi-directional many-to-one association to Bhpost
+	@OneToMany(mappedBy="bhuser")
+	private List<Bhpost> bhposts;
 
 	public Bhuser() {
 	}
 
-	public long getBhuserid() {
+	public int getBhuserid() {
 		return this.bhuserid;
 	}
 
-	public void setBhuserid(long bhuserid) {
+	public void setBhuserid(int bhuserid) {
 		this.bhuserid = bhuserid;
+	}
+
+	public String getGravatarurl() {
+		return this.gravatarurl;
+	}
+
+	public void setGravatarurl(String gravatarurl) {
+		this.gravatarurl = gravatarurl;
 	}
 
 	public Date getJoindate() {
@@ -77,6 +100,28 @@ public class Bhuser implements Serializable {
 
 	public void setUserpassword(String userpassword) {
 		this.userpassword = userpassword;
+	}
+
+	public List<Bhpost> getBhposts() {
+		return this.bhposts;
+	}
+
+	public void setBhposts(List<Bhpost> bhposts) {
+		this.bhposts = bhposts;
+	}
+
+	public Bhpost addBhpost(Bhpost bhpost) {
+		getBhposts().add(bhpost);
+		bhpost.setBhuser(this);
+
+		return bhpost;
+	}
+
+	public Bhpost removeBhpost(Bhpost bhpost) {
+		getBhposts().remove(bhpost);
+		bhpost.setBhuser(null);
+
+		return bhpost;
 	}
 
 }

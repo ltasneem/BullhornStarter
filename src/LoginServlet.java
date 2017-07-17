@@ -35,7 +35,16 @@ public class LoginServlet extends HttpServlet {
 		//first... check that the action variable contains something
 		//then the code below will determine if they clicked logout and kill the session
 		//before sending the user back to the login page
-		
+		if(!action.isEmpty()||!(action==null)){
+		    if (request.getParameter("action").toString().equals("logout")){
+		        //Go back to login.jsp. 
+		        nextPage = "/login.jsp";
+		        response.sendRedirect(request.getContextPath() + nextPage);
+		        return;//return here exits the method and prevents an error
+		    }else{
+		        nextPage = "/home.jsp";
+		    }
+		}
 
 			
 		//putting a blank message just ensures I have a blank message.Since the message is set in the session

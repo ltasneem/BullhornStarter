@@ -5,15 +5,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <jsp:include page="bootstrap.jsp"></jsp:include>
-<title>Insert title here</title>
+<title>BullHorn</title>
 </head>
 <body>
-<jsp:include page="navbar.jsp"></jsp:include>
-<h1>Error</h1>
-<!-- message is set by the servlet that calls this page -->
-<h2>${message}</h2>
-<a href="https://en.wikipedia.org/wiki/Matt_Groening">
-<img src="images/mistakesweremade.png" alt="Mistakes were made">
-</a>
+<h1>This is the support page</h1>
 </body>
 </html>

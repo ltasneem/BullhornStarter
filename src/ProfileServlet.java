@@ -22,9 +22,9 @@ import javax.servlet.http.HttpSession;
 
 import customTools.DbUser;
 
-//import customTools.DbUser;
+import model.Bhuser;
 
-
+@WebServlet("/ProfileServlet")
 public class ProfileServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -72,9 +72,10 @@ public class ProfileServlet extends HttpServlet {
 		 * since you can only edit your own profile.
 		 * all urls coming to this page must contain both parameters (userid and action) or get an error.
 		 */			
-		User loggedInUser = (User) session.getAttribute("user");//<-- here we are casting to a User object
-		User profileUser = DbUser.getUserById(userid);//<-- we don't have to cast this time because we have a userId and the DbUser class knows what to do with a userId
-
+		//User loggedInUser = (User) session.getAttribute("user");//<-- here we are casting to a User object
+		//User profileUser = DbUser.getUserById(userid);//<-- we don't have to cast this time because we have a userId and the DbUser class knows what to do with a userId
+		Bhuser loggedInUser = (Bhuser) session.getAttribute("user");
+		Bhuser profileUser = DbUser.getUser(userid);
 		
 		//REVIEW: What do we know at this point....
 		/* ONE: The logged in user came from the session. 
@@ -92,30 +93,30 @@ public class ProfileServlet extends HttpServlet {
 			String userEmail = request.getParameter("useremail");
 			String userMotto = request.getParameter("usermotto");
 			profileUser.setMotto(userMotto);
-			profileUser.setEmail(userEmail);
-			DbUser.updateUser(profileUser);
+			profileUser.setUseremail(userEmail);
+			DbUser.update(profileUser);
 		}
 		///////////////////////////////////////////////////////////////////////////////
 
 		//if the loggedInUser is requesting their own profile
 		//then show profile.jsp in edit mode (ie... values in textboxes and a submit button)
-		if (loggedInUser.getUserId()==profileUser.getUserId()){
+		if (loggedInUser.getBhuserid()==profileUser.getBhuserid()){
 			//display profile as form
 			//the session variable editProfile is used by the JSP to
 			//display the profile in edit mode
 			request.setAttribute("editProfile", true);
-			request.setAttribute("userid", profileUser.getUserId());
+			request.setAttribute("userid", profileUser.getBhuserid());
 			request.setAttribute("username", profileUser.getUsername());
-			request.setAttribute("useremail", profileUser.getEmail());
+			request.setAttribute("useremail", profileUser.getUseremail());
 			request.setAttribute("usermotto", profileUser.getMotto());
 		}else{
 			//display profile read-only
 			//the session variable editProfile is used by the JSP to
 			//display the profile in read-only mode
 			request.setAttribute("editProfile", false);
-			request.setAttribute("userid", profileUser.getUserId());
+			request.setAttribute("userid", profileUser.getBhuserid());
 			request.setAttribute("username", profileUser.getUsername());
-			request.setAttribute("useremail", profileUser.getEmail());
+			request.setAttribute("useremail", profileUser.getUseremail());
 			request.setAttribute("usermotto", profileUser.getMotto());
 		}
 
@@ -125,6 +126,7 @@ public class ProfileServlet extends HttpServlet {
 
 		nextURL = "/profile.jsp";
 		//redirect to next page as indicated by the value of the nextURL variable
+		getServletContext().getRequestDispatcher(nextURL).forward(request,response);
 
 	}
 }
